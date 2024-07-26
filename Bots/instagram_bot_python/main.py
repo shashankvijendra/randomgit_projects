@@ -16,11 +16,9 @@ print(Fore.GREEN + """\n
     
 
 print("Please Login!")
-username = "random___poster"
-password =  "Vs724071997$"
-search_list = ["thecliffyvibe", "ananyaraj.official", "ranju.k_raj",
-               "nishtharoy007", "sakshimalikk", "yaminijoshi_25"]
-search_username = search_list[4]
+username = ""
+password = ""
+search_username = ""
 print("\nPlease Wait. Log in...")
 
 instagram = Instagram(username=username, password=password)
@@ -43,12 +41,12 @@ while True:
         elif choice == 3:
             instagram.images_load(username=search_username)
         elif choice == 4:
-            user = input("Username: ")
-            instagram.whatchStory(username = user)
+            search_username = input("Username: ")
+            instagram.whatchStory(username = search_username)
         elif choice == 9:
             break
         else:
-            "You entered incorrectly!"
+            "Enter correct choice!"
     except KeyboardInterrupt:
-        print("\n" + "Goodbye, Friend!")
+        print("\n" + "Time to leave!")
         quit()

@@ -119,7 +119,6 @@ class Instagram():
 
             self.browser.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/ul/li[3]").click()   
 
-            Instagram.scrollDown(self)
             following = self.browser.find_elements_by_css_selector(
                         ".FPmhX.notranslate._0imsa")
                 
@@ -136,65 +135,6 @@ class Instagram():
         except Exception:
             print("You aren't following anyone.")
     
-    def followUser(self, username): 
-        self.browser.get(f"https://www.instagram.com/{username}/")
-        time.sleep(4)
-                 
-        
-        try:
-            try:
-                self.browser.find_element_by_css_selector("._5f5mN.jIbKX._6VtSN.yZn4P").click()
-            except:     
-                self.browser.find_element_by_css_selector(".sqdOP.L3NKy.y3zKF").click()
-            print(f"{username} is following.")
-            
-        except Exception:
-            button = self.browser.find_element_by_css_selector("._5f5mN.-fzfL._6VtSN.yZn4P")
-            print(f"Already follow {username}.")
-
-    def unFollowUser(self,username):
-        self.browser.get(f"https://www.instagram.com/{username}/")
-        time.sleep(4)
-         
-        try:
-            self.browser.find_element_by_css_selector("._5f5mN.jIbKX._6VtSN.yZn4P")
-            print(f"You don't already follow {username}.")
-        except:
-            try:
-                self.browser.find_element_by_css_selector("._5f5mN.-fzfL._6VtSN.yZn4P").click()
-            except:
-                self.browser.find_element_by_css_selector(".qF0y9.Igw0E.IwRSH.eGOV_._4EzTm.soMvl").click()
-                   
-            unFollow = self.browser.find_element_by_css_selector(".aOOlW.-Cab_")
-            time.sleep(3)
-            unFollow.click()
-            print(f"{username} unfollowed.")
-
-    def whoDontFollowMe(self):
-        self.followers = []
-        self.following = []
-        self.dontfollow = []
-        
-        with open("followers.txt", "r") as file:
-            for i in file:
-                self.followers.append(i.strip())
-        with open("following.txt", "r") as file2:
-            for i in file2:
-                self.following.append(i.strip())
-
-        print("Users who do not follow you:".center(25,"*"))
-        print()
-        for user in self.following:
-            if not user in self.followers:
-                self.dontfollow.append(user)
-                print(user)
-                
-        result = input("Would you like to unfollow people who don't follow you(all)?(Y/N): ")
-        if result == "Y":
-            for user in self.dontfollow:
-                Instagram.unFollowUser(self,user)
-        else:
-            print("I haven't unfollowed anyone.")
     
     def whatchStory(self, username):
         time.sleep(2)
@@ -205,24 +145,6 @@ class Instagram():
             self.browser.find_element_by_css_selector("._6q-tv").click()
         except Exception:
             print("Something went wrong.")
-    
-    def scrollDown(self):
-        # Javascript commands
-
-        jsCommand = """
-        page = document.querySelector(".isgrP");
-        page.scrollTo(0,page.scrollHeight);
-        var pageDown = page.scrollHeight;
-        return pageDown;
-        """
-        pageDown = self.browser.execute_script(jsCommand)
-
-        while True:
-            end = pageDown
-            time.sleep(1)
-            pageDown = self.browser.execute_script(jsCommand)
-            if end == pageDown:
-                break   
     
     def images_load(self, username):
         self.browser.get(f"https://www.instagram.com/{username}/")
