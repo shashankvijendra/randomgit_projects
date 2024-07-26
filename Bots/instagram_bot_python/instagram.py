@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 import os
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from datetime import datetime
 import urllib.request
 
 def download_image(url, save_as):
@@ -147,6 +147,7 @@ class Instagram():
             print("Something went wrong.")
     
     def images_load(self, username):
+        print('Start images download', datetime.now())
         self.browser.get(f"https://www.instagram.com/{username}/")
         time.sleep(8)
         post_count = self.browser.find_element(By.XPATH, 
@@ -155,25 +156,18 @@ class Instagram():
             print(post_count)
             post_count = int(post_count)
         except:
-            post_count = 10
-        vs = 0
-        while vs<=post_count:
-            self.browser.execute_script("window.scrollBy(0,900)")
-            vs += 1
-            time.sleep(3)
+            post_count = 10        
 
         set_data = set()
         main_count = 0
         i = 0
-        while True:
+        while main_count<=post_count:
             wait_time = 30
             print('While loop', main_count)
             xpath = "//header/following-sibling::div[2]/div"
             element = WebDriverWait(self.browser, wait_time).until(EC.element_to_be_clickable((By.XPATH, xpath)))
             img_element = element.find_elements(By.XPATH, "//img[@style='object-fit: cover;']")
             img_src= [(i.get_attribute("alt"), i.get_attribute("src")) for i in img_element if i.get_attribute("alt")]
-            if main_count>=len(img_src):
-                break
             download_path = os.path.join(os.getcwd(), 'temp', 'browser_downloads')
             for save_as, image_url in img_src:
                 if image_url in set_data:
@@ -182,11 +176,13 @@ class Instagram():
                 download_image(image_url, f"{download_path}/{username}_images_{i}.png")
                 time.sleep(1)
                 set_data.add(image_url)
-            main_count += 10
+            main_count += 9
             self.browser.execute_script("window.scrollBy(0,900)")
+            if main_count>=len(img_src):
+                break
             time.sleep(3)            
         
-        print(img_src)
+        print('End images download', datetime.now())
         # screenshot_path = "page_screenshot.png"
         # driver.save_screenshot(screenshot_path)
         
