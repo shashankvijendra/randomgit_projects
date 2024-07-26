@@ -33,7 +33,6 @@ while True:
                 4- Whatch Story\n
                 9- Exit\n
                 Choice: """))
-        choice = 3
         if choice == 1:
             instagram.getFollowers(search_username)
         elif choice == 2:
