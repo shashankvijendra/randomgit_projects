@@ -18,7 +18,6 @@ print(Fore.GREEN + """\n
 print("Please Login!")
 username = ""
 password = ""
-search_username = ""
 print("\nPlease Wait. Log in...")
 
 instagram = Instagram(username=username, password=password)
@@ -38,7 +37,8 @@ while True:
         elif choice == 2:
             instagram.getFollowing()
         elif choice == 3:
-            instagram.images_load(username=search_username)
+            input_search_username = input("Username: ")
+            instagram.images_load(username=input_search_username)
         elif choice == 4:
             search_username = input("Username: ")
             instagram.whatchStory(username = search_username)

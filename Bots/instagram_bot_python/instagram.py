@@ -149,6 +149,18 @@ class Instagram():
     def images_load(self, username):
         self.browser.get(f"https://www.instagram.com/{username}/")
         time.sleep(8)
+        post_count = self.browser.find_element(By.XPATH, 
+                "//header/section[3]/ul/li[1]/div/span/span").text
+        try:
+            print(post_count)
+            post_count = int(post_count)
+        except:
+            post_count = 10
+        vs = 0
+        while vs<=post_count:
+            self.browser.execute_script("window.scrollBy(0,900)")
+            vs += 1
+            time.sleep(3)
 
         set_data = set()
         main_count = 0
@@ -170,7 +182,7 @@ class Instagram():
                 download_image(image_url, f"{download_path}/{username}_images_{i}.png")
                 time.sleep(1)
                 set_data.add(image_url)
-            main_count += 1
+            main_count += 10
             self.browser.execute_script("window.scrollBy(0,900)")
             time.sleep(3)            
         
