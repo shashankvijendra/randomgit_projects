@@ -1,4 +1,4 @@
-# Instagram_bot
+# Instagram Bot
 Instagram Bot to Download images from the instagram
 
 ## Properties
