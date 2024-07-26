@@ -88,23 +88,25 @@ class Instagram():
 
             self.browser.find_elements(by='xpath',
                 value="//header/section[3]/ul/li[2]")[0].click()
-
+            time.sleep(5)
             WebDriverWait(self.browser, 30).until(
-                EC.element_to_be_clickable((By.CLASS_NAME, 
-                "xyi19xy x1ccrb07 xtf3nb5 x1pc53ja x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6")))
+                EC.element_to_be_clickable((By.XPATH, 
+                "//*[@class='x1dm5mii x16mil14 xiojian x1yutycm x1lliihq x193iq5w xh8yej3']/div//a")))
             
-            followers = self.browser.find_elements(by="class",
-                    value="xyi19xy x1ccrb07 xtf3nb5 x1pc53ja x1lliihq x1iyjqo2 xs83m0k xz65tgg x1rife3k x1n2onr6")
+            followers = self.browser.find_elements(by='xpath',
+                    value="//*[@class='x1dm5mii x16mil14 xiojian x1yutycm x1lliihq x193iq5w xh8yej3']/div//a")
             print(followers)
-            list = []
+            unique_followers = set()
             number = 0
             for follower in followers:
+                username_url = follower.get_attribute('href')
+                follower_username = username_url.split('.com/')[1].replace('/','')
                 number += 1
-                print(f"{number}" + " --> " + follower.text)
-                list.append(follower.text)
+                print(f"{number}" + " --> " + follower_username)
+                unique_followers.add(follower_username)
             
             with open("followers.txt", "w", encoding="utf8") as file:
-                for follower in list:
+                for follower in unique_followers:
                     file.write(f"{follower}\n")
         except Exception as err:
             print(err)
@@ -176,7 +178,9 @@ class Instagram():
                 download_image(image_url, f"{download_path}/{username}_images_{i}.png")
                 time.sleep(1)
                 set_data.add(image_url)
-            main_count += 9
+            main_count += 8
+            self.browser.execute_script("window.scrollBy(0,900)")
+            self.browser.execute_script("window.scrollBy(0,900)")
             self.browser.execute_script("window.scrollBy(0,900)")
             if main_count>=len(img_src):
                 break

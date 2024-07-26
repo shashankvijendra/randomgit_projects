@@ -33,7 +33,8 @@ while True:
                 9- Exit\n
                 Choice: """))
         if choice == 1:
-            instagram.getFollowers(search_username)
+            input_search_username = input("Username: ")
+            instagram.getFollowers(input_search_username)
         elif choice == 2:
             instagram.getFollowing()
         elif choice == 3:
