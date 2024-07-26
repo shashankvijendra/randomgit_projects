@@ -34,7 +34,7 @@ Site to download python3 https://www.python.org/downloads/
 # Installation
 
 ```sh
-$ git clone https://github.com/alii76tt/instagram_bot_python
+$ git clone https://github.com/shashankvijendra/randomgit_projects.git
 $ cd instagram_bot_python
 $ pip install -r requirements.txt
 $ python3 main.py
