@@ -182,8 +182,6 @@ class Instagram():
             self.browser.execute_script("window.scrollBy(0,900)")
             self.browser.execute_script("window.scrollBy(0,900)")
             self.browser.execute_script("window.scrollBy(0,900)")
-            if main_count>=len(img_src):
-                break
             time.sleep(3)            
         
         print('End images download', datetime.now())
