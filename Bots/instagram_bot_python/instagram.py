@@ -15,11 +15,15 @@ def download_image(url, save_as):
 
 
 
-def load_browser(download_path=None, headless=False):
+def load_browser(download_path=None,
+                 video_download_path=None, headless=False):
     '''browser load '''
     if not download_path:
         download_path = os.path.join(os.getcwd(), 'temp', 'browser_downloads')
         os.makedirs(download_path, exist_ok=True)
+    if not video_download_path:
+        video_download_path = os.path.join(os.getcwd(), 'temp', 'video_downloads')
+        os.makedirs(video_download_path, exist_ok=True)
 
     options = Options()
     options.add_argument('--disable-infobars')
@@ -199,7 +203,7 @@ class Instagram():
 
     def reels_load(self, username):
         print('Start images download', datetime.now())
-        self.browser.get(f"https://www.instagram.com/{username}/")
+        self.browser.get(f"https://www.instagram.com/{username}/reels/")
         time.sleep(8)
         post_count = self.browser.find_element(By.XPATH, 
                 "//header/section[3]/ul/li[1]/div/span/span").text
@@ -208,10 +212,7 @@ class Instagram():
             main_post_count = copy.deepcopy(int(post_count.replace(',','')))
         except Exception as err:
             print(err)
-            main_post_count = 10        
-
-        reels_xpath = "//header/following-sibling::div[2]/div"
-        element = WebDriverWait(self.browser, wait_time).until(EC.element_to_be_clickable((By.XPATH, xpath)))
+            main_post_count = 10
                 
         set_data = set()
         main_count = 0
@@ -221,20 +222,20 @@ class Instagram():
                 print('While loop', main_count)
                 xpath = "//header/following-sibling::div[2]/div"
                 element = WebDriverWait(self.browser, wait_time).until(EC.element_to_be_clickable((By.XPATH, xpath)))
-                img_element = element.find_elements(By.XPATH, "//img[@style='object-fit: cover;']")
-                img_src= [(i.get_attribute("alt"), i.get_attribute("src")) for i in img_element if i.get_attribute("alt")]
-                print("--len of elements", len(img_src))
-                download_path = os.path.join(os.getcwd(), 'temp', 'browser_downloads')
-                for save_as, image_url in img_src:
-                    if image_url in set_data:
+                video_element = element.find_elements(By.XPATH, "//a[@class='x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xt0psk2 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz _a6hd']")
+                video_src= [i.get_attribute("href") for i in video_element[1:]]
+                print("--len of elements", len(video_src))
+                video_download_path = os.path.join(os.getcwd(), 'temp', 'video_downloads')
+                for video_url in video_src:
+                    if video_url in set_data:
                         continue
-                    cn = len(os.listdir(download_path)) + 1
-                    download_image(image_url, f"{download_path}/{username}_images_{cn}.png")
+                    cn = len(os.listdir(video_download_path)) + 1
+                    download_image(video_url, f"{video_download_path}/{username}_video_{cn}.png")
                     time.sleep(1)
-                    set_data.add(image_url)
+                    set_data.add(video_url)
                 print('----main_count----', main_count)
-                print('----file count----', len(os.listdir(download_path)))
-                main_count = max(len(os.listdir(download_path)), main_count+10)
+                print('----file count----', len(os.listdir(video_download_path)))
+                main_count = max(len(os.listdir(video_download_path)), main_count+10)
                 self.browser.execute_script("window.scrollBy(0,900)")
                 self.browser.execute_script("window.scrollBy(0,900)")
                 time.sleep(1)
