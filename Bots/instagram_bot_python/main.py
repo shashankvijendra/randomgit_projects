@@ -29,7 +29,8 @@ while True:
                 1- Get Followers\n
                 2- Get Following\n
                 3- Images Download\n
-                4- Whatch Story\n
+                4- Videos Download\n
+                5- Whatch Story\n
                 9- Exit\n
                 Choice: """))
         if choice == 1:
@@ -41,6 +42,9 @@ while True:
             input_search_username = input("Username: ")
             instagram.images_load(username=input_search_username)
         elif choice == 4:
+            input_search_username = input("Username: ")
+            instagram.reels_load(username=input_search_username)
+        elif choice == 5:
             search_username = input("Username: ")
             instagram.whatchStory(username = search_username)
         elif choice == 9:

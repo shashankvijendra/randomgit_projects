@@ -13,10 +13,32 @@ import copy
 def download_image(url, save_as):
     urllib.request.urlretrieve(url, save_as)
 
+import instaloader
+# Download the video
+def instagram_download_video(post_url, username):
+    try:
+        video_download_path = os.path.join(os.getcwd(), 'temp', 'video_downloads')
+        loader = instaloader.Instaloader(
+            download_pictures=False,
+            download_video_thumbnails=False,
+            save_metadata=False,
+            compress_json=False,
+            dirname_pattern=video_download_path
+        )
+        post = instaloader.Post.from_shortcode(loader.context, post_url.split('/')[-2])
+        if post.is_video:
+            loader.download_post(post, target=username)
+            print("Video downloaded successfully.")
+        else:
+            print("The post is not a video.")
+        
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 def load_browser(download_path=None,
-                 video_download_path=None, headless=False):
+                 video_download_path=None,
+                 headless=False):
     '''browser load '''
     if not download_path:
         download_path = os.path.join(os.getcwd(), 'temp', 'browser_downloads')
@@ -202,7 +224,7 @@ class Instagram():
         # driver.save_screenshot(screenshot_path)
 
     def reels_load(self, username):
-        print('Start images download', datetime.now())
+        print('Start Reels download', datetime.now())
         self.browser.get(f"https://www.instagram.com/{username}/reels/")
         time.sleep(8)
         post_count = self.browser.find_element(By.XPATH, 
@@ -229,8 +251,8 @@ class Instagram():
                 for video_url in video_src:
                     if video_url in set_data:
                         continue
-                    cn = len(os.listdir(video_download_path)) + 1
-                    download_image(video_url, f"{video_download_path}/{username}_video_{cn}.png")
+                    instagram_download_video(
+                        post_url=video_url, username=username)
                     time.sleep(1)
                     set_data.add(video_url)
                 print('----main_count----', main_count)
@@ -243,8 +265,14 @@ class Instagram():
                 time.sleep(1)
                 print(main_count<=main_post_count, main_post_count, post_count)
             except Exception as err:
-                print(err)            
-        
-        print('End images download', datetime.now())
+                print(err) 
+                time.sleep(2)      
+                     
+        video_download_path = os.path.join(os.getcwd(), 'temp', 'video_downloads')
+        test = os.listdir(video_download_path)
+        for item in test:
+            if item.endswith(".txt"):
+                os.remove( os.path.join(video_download_path, item))
+        print('End Videos download', datetime.now())
         # screenshot_path = "page_screenshot.png"
         # driver.save_screenshot(screenshot_path)        
