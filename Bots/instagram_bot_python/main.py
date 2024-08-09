@@ -1,6 +1,7 @@
 from getpass import getpass
 from colorama import Fore
 from instagram import Instagram
+from password import username, password
 
 print(Fore.GREEN + """\n
                                /'                                                             /'                /'
@@ -16,8 +17,6 @@ print(Fore.GREEN + """\n
     
 
 print("Please Login!")
-username = ""
-password = ""
 print("\nPlease Wait. Log in...")
 
 instagram = Instagram(username=username, password=password)

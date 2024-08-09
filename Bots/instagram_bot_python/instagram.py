@@ -251,8 +251,21 @@ class Instagram():
                 for video_url in video_src:
                     if video_url in set_data:
                         continue
-                    instagram_download_video(
-                        post_url=video_url, username=username)
+                    try:
+                        instagram_download_video(
+                            post_url=video_url, username=username)
+                    except:
+                        close_tab_xpath = "//div[@class='x1i10hfl x972fbf xcfux6l x1qhh985 xm0m39n x9f619 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz x6s0dn4 xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x1ypdohk x78zum5 xl56j7k x1y1aw1k x1sxyh0 xwib8y2 xurb0ha xcdnw81']/div[@class='x6s0dn4 x78zum5 xdt5ytf xl56j7k']"
+                        element = WebDriverWait(self.browser, wait_time).until(EC.element_to_be_clickable((By.XPATH, close_tab_xpath)))
+                        if element:
+                            close_tab_button = self.browser.find_elements(
+                                by='xpath',value=close_tab_xpath)
+                            if len(close_tab_button)>=2:
+                                close_tab_button[1].click()
+                                time.sleep(1)
+                                instagram_download_video(
+                                    post_url=video_url, username=username)
+                            
                     time.sleep(1)
                     set_data.add(video_url)
                 print('----main_count----', main_count)
